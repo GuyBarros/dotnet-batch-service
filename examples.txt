@@ -1,0 +1,227 @@
+Server:
+
+# Increase log verbosity
+
+log_level = "ERR"
+
+# Setup data dir
+
+data_dir = "C:\\temp\\nomad\\data\\server\\server1"
+
+# Give the agent a unique name. Defaults to hostname
+
+name = "server1"
+
+# Enable the server
+
+server {
+
+  enabled = true
+
+  # Self-elect, should be 3 or 5 for production
+
+  bootstrap_expect = 1
+
+}
+
+ 
+
+Client:
+
+# Increase log verbosity
+
+log_level = "ERR"
+
+# Setup data dir
+
+data_dir = "C:\\temp\\nomad\\data\\clients\\client1"
+
+# Give the agent a unique name. Defaults to hostname
+
+name = "client1"
+
+# Enable the client
+
+client {
+
+    enabled = true
+
+    servers = ["127.0.0.1:4647"]
+
+                network_interface = "Ethernet 4"
+
+                cpu_total_compute = 2000
+
+                memory_total_mb = 2000
+
+                gc_interval = "2m"
+
+                max_kill_timeout = "30s"            
+
+}
+
+plugin "raw_exec" {
+
+      config {
+
+        enabled = true
+
+        no_cgroups = true
+
+      }
+
+    }
+
+# Modify our port to avoid a collision with server1
+
+ports {
+
+    http = 5656
+
+}
+
+ 
+
+Jobs:
+
+job "tryterminate" {
+
+  datacenters = ["dc1"]
+
+  type = "batch"
+
+  parameterized {
+
+    payload       = "required"
+
+    meta_required = ["dispatcher_email"] #nonsense
+
+  }
+
+  group "clients1" {
+
+    count = 1
+
+    task "callexe" {
+
+      driver = "raw_exec"
+
+                  kill_signal = "SIGKILL"
+
+                  kill_timeout = "20s"
+
+                  leader = "true"
+
+                  config {
+
+                               #command = "C:\\windows\\system32\\calc.exe" #trytoterminate 😉
+
+                               command = "C:\\temp\\Nomad\\exe\\Primes.exe"
+
+#command = "C:\\temp\\Nomad\\exe\\Return.exe"
+
+                  }
+
+    }
+
+  }
+
+}
+
+ 
+
+Payload:
+
+{
+
+  "Payload": "YXNkZg==",
+
+  "Meta": {
+
+    "dispatcher_email": "Value"
+
+  }
+
+}
+
+ 
+
+Sample Return.exe
+
+class Program
+
+    {
+
+        static int Main(string[] args)
+
+        {
+
+            string docPath = @"\\Filesharepath";
+
+            string myFileName = String.Format("{0}__{1}", DateTime.Now.ToString("yyyyMMddhhss"), "MyFileName");
+
+ 
+
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, myFileName),true))
+
+            {
+
+                string line = DateTime.Now.ToString();
+
+                    outputFile.WriteLine(line);
+
+                foreach (string arg in args)
+
+                    outputFile.WriteLine(args);
+
+            }
+
+            return 0;
+
+        }
+
+    }
+
+ 
+
+Sample Primes.exe
+
+static void Main(string[] args)
+
+        {
+
+            Parallel.For(0, int.MaxValue, i =>
+
+            {
+
+                Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+
+                IsPrimeNumber(i);
+
+            });
+
+        }
+
+ 
+
+        public static bool IsPrimeNumber(long testNumber)
+
+        {
+
+            if (testNumber < 2) return false;
+
+ 
+
+            if (testNumber % 2 == 0) return false;
+
+ 
+
+            long upperBorder = (long)System.Math.Round(System.Math.Sqrt(testNumber), 0);
+
+            for (long i = 3; i <= upperBorder; i = i + 2)
+
+                if (testNumber % i == 0) return false;
+
+            return true;
+
+        }
