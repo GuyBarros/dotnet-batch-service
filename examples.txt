@@ -225,3 +225,6 @@ static void Main(string[] args)
             return true;
 
         }
+
+
+        nomad job dispatch -meta "dispatcher_email"="Value" tryterminate  payload.json

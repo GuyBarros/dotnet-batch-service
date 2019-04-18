@@ -37,7 +37,7 @@ job "tryterminate" {
         leader = "true"
         
         artifact {
-           source      = "git::https://github.com/example/nomad-examples"
+           source      = "git::https://github.com/GuyBarros/dotnet-batch-service"
            destination = "C:\\HashiCorp\\Nomad_Jobs\\"
          }
 
