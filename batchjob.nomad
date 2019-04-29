@@ -1,4 +1,4 @@
-job "tryterminate" {
+job "batchjob" {
   datacenters = ["dc1"]
   type = "batch"
 
@@ -19,11 +19,11 @@ job "tryterminate" {
 
  template {
         data = <<EOH
-          start dotnet-batch-service.exe
-          ping 127.0.0.1 -n ${NOMAD_META_TTL}
+          start "\\Hashicorp\\Nomad_Jobs\\dotnet-batch-service.exe"
+          ping 127.0.0.1 -n 30
           taskkill /im dotnet-batch-service.exe /f
         EOH
-        destination = "C:\\HashiCorp\\Nomad_Jobs\\runbatch.ps1"
+        destination = "${NOMAD_ALLOC_DIR}\\Hashicorp\\Nomad_Jobs\\runbatch.ps1"
       }
 
       driver = "raw_exec"
@@ -32,18 +32,22 @@ job "tryterminate" {
         memory = 256
         }
 
-        kill_signal = "SIGKILL"
-        kill_timeout = "20s"
-        leader = "true"
+//${NOMAD_META_TTL}
+        //kill_signal = "SIGKILL"
+        //kill_timeout = "20s"
+        //leader = "true"
         
         artifact {
-           source      = "git::https://github.com/GuyBarros/dotnet-batch-service"
-           destination = "C:\\HashiCorp\\Nomad_Jobs\\"
+           source   = "git::https://github.com/GuyBarros/dotnet-batch-service"
+            destination = "${NOMAD_ALLOC_DIR}\\Hashicorp\\Nomad_Jobs\\"
+           
          }
 
         config {
+      #  command = "\\Hashicorp\\Nomad_Jobs\\dotnet-batch-service.exe" // This works
           command = "powershell.exe"
-          args = ["C:\\HashiCorp\\Nomad_Jobs\\runbatch.ps1"]
+          args = ["${NOMAD_ALLOC_DIR}\\Hashicorp\\Nomad_Jobs\\runbatch.ps1"]
+        #   args = ["\\Hashicorp\\Nomad_Jobs\\dotnet-batch-service.exe"] 
          }
 
     }
