@@ -4,7 +4,9 @@
   
     "meta": {
   
-      "TTL": 30
+      "TTL": 60,
+      "filepath": "\\\\int.osram-light.com\\Net-Rbg\\!Temp\\Ziegler\\Log.log"
+
   
 }
 

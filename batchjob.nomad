@@ -7,7 +7,7 @@ job "batchjob" {
     value     = "windows"
   }
 
-
+// to dispatch this job use nomad job dispatch -meta TTL=60 batchjob  payload.json
   parameterized {
     payload       = "required"
     meta_required = ["TTL"] #ttl is the amount of time this batch job will run for before it gets executed
