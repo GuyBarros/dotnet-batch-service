@@ -17,7 +17,8 @@ namespace dotnet_batch_service
                 Thread.CurrentThread.Priority = ThreadPriority.Lowest;
 
                 if (IsPrimeNumber(i)){
-                    Console.WriteLine(i + " is a prime number.");
+                   // Console.WriteLine(i + " is a prime number.");
+                    Console.Out.WriteLine(i + " is a prime number.");
                 }
 
             });
