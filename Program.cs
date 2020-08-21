@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,6 +10,9 @@ namespace dotnet_batch_service
         static void Main(string[] args)
 
         {
+            StreamWriter sw = new StreamWriter(@".\PrimeNumbers.txt");
+            sw.AutoFlush = true;
+            Console.SetOut(sw);
 
             Parallel.For(0, int.MaxValue, i =>
 
@@ -18,7 +22,7 @@ namespace dotnet_batch_service
 
                 if (IsPrimeNumber(i)){
                    // Console.WriteLine(i + " is a prime number.");
-                    Console.Out.WriteLine(i + " is a prime number.");
+                    Console.Out.WriteLine(i);
                 }
 
             });

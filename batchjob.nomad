@@ -26,7 +26,6 @@ job "batchjob" {
             )
           start local/repo/dotnet-batch-service.exe
           ping 127.0.0.1 -n $TTL
-          taskkill /im dotnet-batch-service.exe /f
         EOH
         destination = "local/runbatch.ps1"
       }
