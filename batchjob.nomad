@@ -7,9 +7,9 @@ job "batchjob" {
     value     = "windows"
   }
 
-// to dispatch this job use nomad job dispatch -meta TTL=60 batchjob  payload.json
+// to dispatch this job use nomad job dispatch -meta TTL=60 batchjob
   parameterized {
-    payload       = "required"
+    payload       = "optional"
     meta_required = ["TTL"] #ttl is the amount of time this batch job will run for before it gets executed
   }
 
@@ -17,7 +17,7 @@ job "batchjob" {
     count = 1
     task "callexe" {
 
-     
+
 
  template {
         data = <<EOH
@@ -37,16 +37,16 @@ job "batchjob" {
         memory = 256
         }
 
- 
+
         artifact {
            source   = "git::https://github.com/GuyBarros/dotnet-batch-service"
             destination = "local/repo"
-           
+
          }
 
         config {
          command = "powershell.exe"
-           args = ["local/runbatch.ps1   ${NOMAD_META_TTL}"] 
+           args = ["local/runbatch.ps1   ${NOMAD_META_TTL}"]
          }
 
     }
@@ -55,4 +55,3 @@ job "batchjob" {
 
 }
 
- 

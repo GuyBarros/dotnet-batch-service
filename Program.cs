@@ -16,25 +16,22 @@ namespace dotnet_batch_service
 
                 Thread.CurrentThread.Priority = ThreadPriority.Lowest;
 
-                IsPrimeNumber(i);
+                if (IsPrimeNumber(i)){
+                    Console.WriteLine(i + " is a prime number.");
+                }
 
             });
 
         }
 
- 
+
 
         public static bool IsPrimeNumber(long testNumber)
 
         {
-
             if (testNumber < 2) return false;
 
- 
-
             if (testNumber % 2 == 0) return false;
-
- 
 
             long upperBorder = (long)System.Math.Round(System.Math.Sqrt(testNumber), 0);
 
